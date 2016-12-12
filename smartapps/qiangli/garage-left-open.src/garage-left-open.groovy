@@ -29,12 +29,12 @@ preferences {
     }
 }
 
-def getOpenThreshold() {
-    return (openThreshold != null && openThreshold != "") ? openThreshold : 1
+int getOpenThreshold() {
+    return ((openThreshold != null && openThreshold != "") ? openThreshold : 1)
 }
 
-def getFrequency() {
-    return (frequency != null && frequency != "") ? frequency : 1
+int getFrequency() {
+    return ((frequency != null && frequency != "") ? frequency : 1)
 }
 
 def installed() {
@@ -54,7 +54,7 @@ def subscribe() {
 }
 
 def doorOpen(evt) {
-    log.trace "doorOpen($evt.name: $evt.value)"
+    log.trace "doorOpen $evt.name: $evt.value"
     def t0 = now()
     def delay = getOpenThreshold() * 60
     runIn(delay, doorOpenTooLong, [overwrite: false])
@@ -62,7 +62,7 @@ def doorOpen(evt) {
 }
 
 def doorClosed(evt) {
-    log.trace "doorClosed($evt.name: $evt.value)"
+    log.trace "doorClosed $evt.name: $evt.value "
 }
 
 def doorOpenTooLong() {
@@ -80,7 +80,7 @@ def doorOpenTooLong() {
             log.debug "Contact has not stayed open long enough since last check ($elapsed ms):  doing nothing"
         }
     } else {
-        log.warn "doorOpenTooLong() called but contact is closed:  doing nothing"
+        log.warn "doorOpenTooLong called but contact is closed:  doing nothing"
     }
 }
 
