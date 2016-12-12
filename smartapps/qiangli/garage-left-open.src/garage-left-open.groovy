@@ -16,11 +16,11 @@ preferences {
     section("Monitor this garage door") {
         input "contact", "capability.contactSensor"
     }
-    section("And notify me if it's open for more than this many minutes (default 1)") {
-        input "openThreshold", "number", description: "Number of minutes", required: false
+    section("And notify me if it's open for more than this many minutes") {
+        input "openThreshold", "number", description: "Number of minutes (default 1)", required: false
     }
-    section("Delay between notifications (default 1 minutes") {
-        input "frequency", "number", title: "Number of minutes", description: "", required: false
+    section("Delay between notifications") {
+        input "frequency", "number", title: "Number of minutes (default 1)", description: "", required: false
     }
     section("Via text message at this number (or via push notification if not specified") {
         input("recipients", "contact", title: "Send notifications to") {
