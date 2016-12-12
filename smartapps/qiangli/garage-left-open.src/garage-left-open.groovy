@@ -65,25 +65,31 @@ def doorOpenTooLong() {
 
     if (contactState.value == "open") {
         def elapsed = now() - contactState.rawDateCreated.time
-        def threshold = (openThreshold() * 60000) - 1000
+        def minutes = openThreshold()
+        def threshold = (minutes * 60000) - 1000
         log.debug "threshold: $threshold"
 
         if (elapsed >= threshold) {
             log.debug "Contact has stayed open long enough since last check ($elapsed ms):  calling sendMessage()"
-            sendMessage()
+
+            def msg = "${contact.displayName} has been left open for ${minutes} minutes."
+            sendMessage(msg)
+            
             runIn(freq, doorOpenTooLong, [overwrite: false])
         } else {
             log.debug "Contact has not stayed open long enough since last check ($elapsed ms):  doing nothing"
         }
     } else {
-        log.warn "doorOpenTooLong called but contact is closed:  doing nothing"
+        log.warn "doorOpenTooLong called but contact is closed"
+
+        def msg = "${contact.displayName} has been closed."
+        sendMessage(msg)
     }
 }
 
-void sendMessage() {
-    def minutes = openThreshold()
-    def msg = "${contact.displayName} has been left open for ${minutes} minutes."
+void sendMessage(msg) {
     log.info msg
+
     if (location.contactBookEnabled) {
         sendNotificationToContacts(msg, recipients)
     } else {
