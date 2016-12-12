@@ -27,6 +27,7 @@ preferences {
         input("alarms", "capability.alarm", title: "Sirens", multiple: true, required: false)
         input("silent", "enum", options: ["Yes", "No"], title: "Strobe only (Yes/No)")
         input("lights", "capability.switch", title: "Flash lights", multiple: true, required: false)
+        input("times", "number", title: "Number of times to flash?", required: false)
         input("sendPush", "bool", title: "Send push notification", required: false)
     }
 }
@@ -113,7 +114,7 @@ def appHandler(evt) {
 
 def continueFlashing() {
     unschedule()
-    flashLights(3)
+    flashLights()
     schedule(util.cronExpression(now() + 5000), "continueFlashing")
 }
 
@@ -171,19 +172,22 @@ private isThermostatOff() {
     return thermostatMode == "off"
 }
 
-private flashLights(numFlashes) {
+private flashLights() {
     def onFor = 1000
     def offFor = 1000
+    def numFlashes = times as Integer
 
     log.debug "Flashing $numFlashes times"
 
-    def delay = 1L
-    numFlashes.times {
-        log.trace "Switch on after  $delay msec"
-        lights?.on(delay: delay)
-        delay += onFor
-        log.trace "Switch off after $delay msec"
-        lights?.off(delay: delay)
-        delay += offFor
+    if (numFlashes) {
+        def delay = 1L
+        numFlashes.times {
+            log.trace "Switch on after  $delay msec"
+            lights?.on(delay: delay)
+            delay += onFor
+            log.trace "Switch off after $delay msec"
+            lights?.off(delay: delay)
+            delay += offFor
+        }
     }
 }
