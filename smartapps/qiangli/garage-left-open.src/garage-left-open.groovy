@@ -17,10 +17,10 @@ preferences {
         input "contact", "capability.contactSensor"
     }
     section("And notify me if it's open for more than this many minutes") {
-        input "openThreshold", "number", description: "Number of minutes (default 1)", required: false
+        input "openThreshold", "number", description: "Number of minutes (default 5)", required: false
     }
     section("Delay between notifications") {
-        input "frequency", "number", title: "Number of minutes (default 1)", description: "", required: false
+        input "frequency", "number", title: "Number of minutes (default 5)", description: "", required: false
     }
     section("Via text message at this number (or via push notification if not specified") {
         input("recipients", "contact", title: "Send notifications to") {
@@ -29,26 +29,19 @@ preferences {
     }
 }
 
-int getOpenThreshold() {
-    return ((openThreshold != null && openThreshold != "") ? openThreshold : 1)
-}
-
-int getFrequency() {
-    return ((frequency != null && frequency != "") ? frequency : 1)
-}
-
 def installed() {
     log.trace "installed()"
-    subscribe()
+    initialize()
 }
 
 def updated() {
     log.trace "updated()"
     unsubscribe()
-    subscribe()
+
+    initialize()
 }
 
-def subscribe() {
+def initialize() {
     subscribe(contact, "contact.open", doorOpen)
     subscribe(contact, "contact.closed", doorClosed)
 }
@@ -56,7 +49,7 @@ def subscribe() {
 def doorOpen(evt) {
     log.trace "doorOpen $evt.name: $evt.value"
     def t0 = now()
-    def delay = getOpenThreshold() * 60
+    def delay = openThreshold() * 60
     log.debug "delay: $delay"
 
     runIn(delay, doorOpenTooLong, [overwrite: false])
@@ -69,11 +62,11 @@ def doorClosed(evt) {
 
 def doorOpenTooLong() {
     def contactState = contact.currentState("contact")
-    def freq = getFrequency() * 60
+    def freq = frequencyMin() * 60
 
     if (contactState.value == "open") {
         def elapsed = now() - contactState.rawDateCreated.time
-        def threshold = (getOpenThreshold() * 60000) - 1000
+        def threshold = (openThreshold() * 60000) - 1000
         log.debug "threshold: $threshold"
 
         if (elapsed >= threshold) {
@@ -89,7 +82,7 @@ def doorOpenTooLong() {
 }
 
 void sendMessage() {
-    def minutes = getOpenThreshold()
+    def minutes = openThreshold()
     def msg = "${contact.displayName} has been left open for ${minutes} minutes."
     log.info msg
     if (location.contactBookEnabled) {
@@ -101,4 +94,12 @@ void sendMessage() {
             sendPush msg
         }
     }
+}
+
+private openThreshold() {
+    ((openThreshold != null && openThreshold != "") ? openThreshold : 5)
+}
+
+private frequencyMin() {
+    ((frequency != null && frequency != "") ? frequency : 5)
 }
