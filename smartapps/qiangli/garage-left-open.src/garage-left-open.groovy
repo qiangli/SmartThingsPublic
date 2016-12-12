@@ -23,7 +23,7 @@ preferences {
         input("frequency", "number", title: "Number of minutes (default 5)", description: "", required: false)
     }
     section("Via text message at this number (or via push notification if not specified") {
-        input("recipients", "contact", title: "Send notifications to")
+        input("recipients", "contact", title: "Send notifications to", required: false)
         input("phone", "phone", title: "Phone number (optional)", required: false)
     }
 }
