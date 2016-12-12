@@ -17,7 +17,7 @@ preferences {
         input("contact", "capability.contactSensor", multiple: false, required: false)
     }
     section("And notify me if it's open for more than this many minutes") {
-        input("openThreshold", "number", description: "Number of minutes (default 5)", required: false)
+        input("openThreshold", "number", title: "Number of minutes (default 5)", required: false)
     }
     section("Delay between notifications") {
         input("frequency", "number", title: "Number of minutes (default 5)", description: "", required: false)
