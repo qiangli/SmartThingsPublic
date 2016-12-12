@@ -14,18 +14,17 @@ definition(
 preferences {
 
     section("Monitor this garage door") {
-        input "contact", "capability.contactSensor"
+        input("contact", "capability.contactSensor", multiple: false, required: false)
     }
     section("And notify me if it's open for more than this many minutes") {
-        input "openThreshold", "number", description: "Number of minutes (default 5)", required: false
+        input("openThreshold", "number", description: "Number of minutes (default 5)", required: false)
     }
     section("Delay between notifications") {
-        input "frequency", "number", title: "Number of minutes (default 5)", description: "", required: false
+        input("frequency", "number", title: "Number of minutes (default 5)", description: "", required: false)
     }
     section("Via text message at this number (or via push notification if not specified") {
-        input("recipients", "contact", title: "Send notifications to") {
-            input "phone", "phone", title: "Phone number (optional)", required: false
-        }
+        input("recipients", "contact", title: "Send notifications to")
+        input("phone", "phone", title: "Phone number (optional)", required: false)
     }
 }
 
