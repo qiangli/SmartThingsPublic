@@ -57,6 +57,8 @@ def doorOpen(evt) {
     log.trace "doorOpen $evt.name: $evt.value"
     def t0 = now()
     def delay = getOpenThreshold() * 60
+    log.debug "delay: $delay"
+
     runIn(delay, doorOpenTooLong, [overwrite: false])
     log.debug "scheduled doorOpenTooLong in ${now() - t0} msec"
 }
@@ -72,6 +74,8 @@ def doorOpenTooLong() {
     if (contactState.value == "open") {
         def elapsed = now() - contactState.rawDateCreated.time
         def threshold = (getOpenThreshold() * 60000) - 1000
+        log.debug "threshold: $threshold"
+
         if (elapsed >= threshold) {
             log.debug "Contact has stayed open long enough since last check ($elapsed ms):  calling sendMessage()"
             sendMessage()
