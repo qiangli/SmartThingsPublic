@@ -47,6 +47,7 @@ def initialize() {
 
 def doorOpen(evt) {
     log.trace "doorOpen $evt.name: $evt.value"
+
     def t0 = now()
     def delay = openThreshold() * 60
     log.debug "delay: $delay"
@@ -57,6 +58,9 @@ def doorOpen(evt) {
 
 def doorClosed(evt) {
     log.trace "doorClosed $evt.name: $evt.value "
+
+    def msg = "${contact.displayName} has been closed."
+    sendMessage(msg)
 }
 
 def doorOpenTooLong() {
@@ -74,16 +78,13 @@ def doorOpenTooLong() {
 
             def msg = "${contact.displayName} has been left open for ${minutes} minutes."
             sendMessage(msg)
-            
+
             runIn(freq, doorOpenTooLong, [overwrite: false])
         } else {
             log.debug "Contact has not stayed open long enough since last check ($elapsed ms):  doing nothing"
         }
     } else {
         log.warn "doorOpenTooLong called but contact is closed"
-
-        def msg = "${contact.displayName} has been closed."
-        sendMessage(msg)
     }
 }
 
