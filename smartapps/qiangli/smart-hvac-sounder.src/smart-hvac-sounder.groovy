@@ -24,21 +24,21 @@ preferences {
     }
 
     section("Notifications") {
-        input("alarms", "capability.alarm", title: "Alarms", multiple: true, required: false)
-        input("silent", "enum", options: ["Yes", "No"], title: "Silent alarm only (Yes/No)")
+        input("alarms", "capability.alarm", title: "Sirens", multiple: true, required: false)
+        input("silent", "enum", options: ["Yes", "No"], title: "Strobe only (Yes/No)")
         input("lights", "capability.switch", title: "Flash lights", multiple: true, required: false)
-        input("sendPush", "bool", title: "Send Push Notification", required: false)
+        input("sendPush", "bool", title: "Send push notification", required: false)
     }
 }
 
 def installed() {
-    log.debug "Installed with settings: ${settings}"
+    log.debug "installed with settings: ${settings}"
 
     initialize()
 }
 
 def updated() {
-    log.debug "Updated with settings: ${settings}"
+    log.debug "updated with settings: ${settings}"
 
     unsubscribe()
     unschedule()
@@ -68,7 +68,7 @@ def thermostatHandler(evt) {
 
     //thermostat is on
     if (isContactOpen()) {
-        log.debug "Something is open, start alarms..."
+        log.debug "some window/door is open, start alarms..."
 
         startAlarms()
     }
@@ -78,7 +78,7 @@ def contactHandler(evt) {
     log.debug "contactHandler: $evt.name: $evt.value"
 
     if (isThermostatOff()) {
-        log.debug "$evt.name thermostat is off."
+        log.debug "thermostat is off."
 
         stopAlarms()
         return
@@ -89,10 +89,10 @@ def contactHandler(evt) {
         startAlarms()
     } else if (evt.value == 'closed') {
         if (!isContactOpen()) {
-            log.debug "Everything is closed, stopping alarms..."
+            log.debug "all windows/doors are closed, stopping alarms..."
             stopAlarms()
         } else {
-            log.debug "Something is still open."
+            log.debug "some window/door is still open."
         }
     }
 }
@@ -145,7 +145,7 @@ private stopAlarms() {
 
 private isContactOpen() {
     def result = sensors.find() { it.currentValue('contact') == 'open' }
-    log.debug "isOpen results: $result"
+    log.debug "isContactOpen results: $result"
 
     return result
 }
@@ -175,7 +175,7 @@ private flashLights(numFlashes) {
     def onFor = 1000
     def offFor = 1000
 
-    log.debug "FLASHING $numFlashes times"
+    log.debug "Flashing $numFlashes times"
 
     def delay = 1L
     numFlashes.times {
