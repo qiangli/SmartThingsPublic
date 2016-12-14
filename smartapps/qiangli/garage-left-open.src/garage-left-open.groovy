@@ -5,7 +5,7 @@ definition(
         name: "Garage Left Open",
         namespace: "qiangli",
         author: "Li Qiang",
-        description: "Monitor your garage door (contact sensor) and get a text message if it is open too long",
+        description: "Monitor your garage door (contact sensor) and get a text message if it is open for too long",
         category: "Safety & Security",
         iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/garage_contact.png",
         iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/garage_contact@2x.png"
@@ -22,8 +22,8 @@ preferences {
     section("Delay between notifications") {
         input("frequency", "number", title: "Number of minutes (default 5)", description: "", required: false)
     }
-    section("Via text message at this number (or via push notification if not specified") {
-        input("recipients", "contact", title: "Send notifications to", required: false)
+    section("Notification") {
+        input("sendPush", "bool", title: "Send push notification", required: false)
         input("phone", "phone", title: "Phone number (optional)", required: false)
     }
 }
@@ -60,7 +60,7 @@ def doorClosed(evt) {
     log.trace "doorClosed $evt.name: $evt.value "
 
     def msg = "${contact.displayName} has been closed."
-    sendMessage(msg)
+    sendCloseMessage(msg)
 }
 
 def doorOpenTooLong() {
@@ -77,7 +77,7 @@ def doorOpenTooLong() {
             log.debug "Contact has stayed open long enough since last check ($elapsed ms):  calling sendMessage()"
 
             def msg = "${contact.displayName} has been left open for ${minutes} minutes."
-            sendMessage(msg)
+            sendOpenMessage(msg)
 
             runIn(freq, doorOpenTooLong, [overwrite: false])
         } else {
@@ -88,17 +88,25 @@ def doorOpenTooLong() {
     }
 }
 
+void sendOpenMessage(msg) {
+    state.msgSent = true
+    sendMessage(msg)
+}
+
+void sendCloseMessage(msg) {
+    if (state.msgSent) {
+        sendMessage(msg)
+    }
+}
+
 void sendMessage(msg) {
     log.info msg
 
-    if (location.contactBookEnabled) {
-        sendNotificationToContacts(msg, recipients)
-    } else {
-        if (phone) {
-            sendSms phone, msg
-        } else {
-            sendPush msg
-        }
+    if (sendPush) {
+        sendPush msg
+    }
+    if (phone) {
+        sendSms phone, msg
     }
 }
 
