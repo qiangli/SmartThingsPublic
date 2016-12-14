@@ -43,6 +43,9 @@ def updated() {
 def initialize() {
     subscribe(contact, "contact.open", doorOpen)
     subscribe(contact, "contact.closed", doorClosed)
+
+    //door could be opened earlier
+    doorOpenTooLong()
 }
 
 def doorOpen(evt) {
