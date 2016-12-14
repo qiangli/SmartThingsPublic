@@ -67,6 +67,8 @@ def doorClosed(evt) {
 }
 
 def doorOpenTooLong() {
+    log.debug "doorOpenTooLong"
+
     def contactState = contact.currentState("contact")
     def freq = frequencyMin() * 60
 
