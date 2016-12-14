@@ -40,7 +40,9 @@ def updated() {
 }
 
 def initialize() {
-    subscribe(master, "switch", switchHandler)
+    log.debug "initialize..."
+    
+    subscribe(switch1, "switch", switchHandler)
 }
 
 def switchHandler(evt) {
