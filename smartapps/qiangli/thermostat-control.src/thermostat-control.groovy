@@ -50,7 +50,7 @@ def switchOnHandler(evt) {
     log.debug "switchOnHandler $evt.name: $evt.value"
 
     unschedule()
-    runIn(delay, 'restore')
+    runIn(delay, 'turnOn')
 }
 
 def switchOffHandler(evt) {
@@ -67,9 +67,15 @@ def turnOff() {
     log.debug "State: $state"
 }
 
-def restore() {
-    def thermostatMode = thermostat.currentValue("thermostatMode")
-    log.debug "Restoring thermostat to thermostatMode $thermostatMode"
+def turnOn() {
+    //def thermostatMode = thermostat.currentValue("thermostatMode")
+    //log.debug "Restoring thermostat to thermostatMode $thermostatMode"
 
-    thermostat.setThermostatMode(thermostatMode)
+    //thermostat.setThermostatMode(thermostatMode)
+    log.debug "Turning on thermostat..."
+    //TODO
+    thermostat.heat()
+
+    state.thermostatModedef thermostatMode = thermostat.currentValue("thermostatMode")
+    log.debug "State: $state"
 }
