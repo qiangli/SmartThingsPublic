@@ -74,7 +74,7 @@ def turnOn() {
     //thermostat.setThermostatMode(thermostatMode)
     log.debug "Turning on thermostat..."
     //TODO
-    thermostat.heat()
+    thermostat.auto()
 
     state.thermostatMode = thermostat.currentValue("thermostatMode")
     log.debug "State: $state"
