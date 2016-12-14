@@ -41,20 +41,23 @@ def updated() {
 
 def initialize() {
     log.debug "initialize..."
-    
-    subscribe(switch1, "switch", switchHandler)
+
+    subscribe(switch1, "switch.on", switchOnHandler)
+    subscribe(switch1, "switch.off", switchOffHandler)
 }
 
-def switchHandler(evt) {
-    log.debug "Desc: $evt.value , $state"
+def switchOnHandler(evt) {
+    log.debug "switchOnHandler $evt.name: $evt.valu"
 
-    if(evt.value == 'off') {
-        unschedule()
-        runIn(delay, 'turnOff')
-    } else if(evt.value == 'on') {
-        unschedule()
-        runIn(delay, 'restore')
-    }
+    unschedule()
+    runIn(delay, 'restore')
+}
+
+def switchOffHandler(evt) {
+    log.debug "switchOffHandler $evt.name: $evt.valu"
+
+    unschedule()
+    runIn(delay, 'turnOff')
 }
 
 def turnOff() {
