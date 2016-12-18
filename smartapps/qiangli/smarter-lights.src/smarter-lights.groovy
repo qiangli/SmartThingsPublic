@@ -51,19 +51,33 @@ def initialize() {
     log.debug "initialize..."
 
     subscribe(doors, "contact.open", contactOpenHandler)
+    subscribe(doors, "contact.closed", contactClosedHandler)
     subscribe(motions, "motion.active", motionActiveHandler)
+    subscribe(motions, "motion.inactive", motionInActiveHandler)
 }
 
 def contactOpenHandler(evt) {
-    log.debug "Contact open $evt.name: $evt.value"
+    log.debug "Contact open $evt.displayName $evt.name: $evt.value"
 
     turnOnLights()
 }
 
+def contactClosedHandler(evt) {
+    log.debug "contact closed $evt.displayName $evt.name: $evt.value"
+
+    scheduleTurnOff()
+}
+
 def motionActiveHandler(evt) {
-    log.debug "Motion active $evt.name: $evt.value"
+    log.debug "Motion active $evt.displayName $evt.name: $evt.value"
 
     turnOnLights()
+}
+
+def motionInActiveHandler(evt) {
+    log.debug "Motion inactive $evt.displayName $evt.name: $evt.value"
+
+    scheduleTurnOff()
 }
 
 def turnOnLights() {
@@ -73,15 +87,20 @@ def turnOnLights() {
         log.debug "It is dark, turning on..."
 
         lights.on()
-
-        def delay = minutes * 60
-        log.debug "Turning off in ${minutes} minutes (${delay}seconds)"
-        runIn(delay, turnOffLights, [overwrite: true])
     }
 }
 
+def scheduleTurnOff() {
+    log.debug "schedule turn off"
+
+    def delay = minutes * 60
+    log.debug "Turning off in ${minutes} minutes (${delay}seconds)"
+    runIn(delay, turnOffLights, [overwrite: true])
+}
+
 def turnOffLights() {
-    log.debug "turn off lights"
+    log.debug "turning off lights"
+
     lights.off()
 }
 
