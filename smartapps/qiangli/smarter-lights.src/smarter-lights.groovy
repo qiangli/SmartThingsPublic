@@ -19,7 +19,7 @@ preferences {
     section("Turn on the lights"){
         input "lights", "capability.switch", multiple: true, title: "Lights", required: true
     }
-    section(hideWhenEmpty: "lights") {
+    section {
         input "afterDark", "bool", title: "After sunset and before sunrise", required: false
         input "offset", "text", title: "Offset before sunset/after sunrise (HH:MM)", required: false, defaultValue: "01:00"
     }
