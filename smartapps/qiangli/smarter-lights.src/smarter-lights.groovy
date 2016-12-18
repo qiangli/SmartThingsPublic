@@ -18,11 +18,13 @@ definition(
 preferences {
     section("Turn on the lights"){
         input "lights", "capability.switch", multiple: true, title: "Lights", required: true
-        input "afterDark", "bool", title: "after sunset and before sunrise", required: false
-        input "offset", hideWhenEmpty: "afterDark", "text", title: "Offset before sunset/after sunrise (HH:MM)", required: false, defaultValue: "01:00"
+    }
+    section(hideWhenEmpty: "lights") {
+        input "afterDark", "bool", title: "After sunset and before sunrise", required: false
+        input "offset", "text", title: "Offset before sunset/after sunrise (HH:MM)", required: false, defaultValue: "01:00"
     }
     section("When door is open"){
-        input "doors", "capability.contactSensor", multiple: true, title: "Open/Close contact sensors", required: false
+        input "doors", "capability.contactSensor", multiple: true, title: "Open/Close Contact sensors", required: false
     }
     section("or motion is detected"){
         input "motions", "capability.motionSensor", multiple: true, title: "Motion sensors", required: false
