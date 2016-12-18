@@ -78,20 +78,17 @@ def turnOff() {
 
 def turnOn() {
     log.debug "Turning on thermostat $mode $temperature $delay, $state ..."
-
-    //seems the command heat/cool does not change the mode?
-    def m = mode?.toLowerCase()
-
-    thermostat.setThermostatMode("$m")
-    switch ("$m") {
-        case "cool":
+    
+    switch ("$mode") {
+        case "Cool":
             thermostat.cool()
             thermostat.setCoolingSetpoint(temperature)
             break
-        case "heat":
+        case "Heat":
             thermostat.heat()
             thermostat.setHeatingSetpoint(temperature)
-        case "auto":
+            break
+        case "Auto":
             thermostat.auto()
             break
     }
