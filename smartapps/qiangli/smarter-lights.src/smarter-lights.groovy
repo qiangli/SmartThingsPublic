@@ -50,10 +50,25 @@ def updated() {
 def initialize() {
     log.debug "initialize..."
 
+    state.disabled = false
+
     subscribe(doors, "contact.open", contactOpenHandler)
     subscribe(doors, "contact.closed", contactClosedHandler)
     subscribe(motions, "motion.active", motionActiveHandler)
     subscribe(motions, "motion.inactive", motionInActiveHandler)
+
+    subscribe(app, appHandler)
+}
+
+def appHandler(evt) {
+    log.debug "app event $evt.displayName $evt.name: $evt.value, disabled: $state.disable"
+
+    state.disabled = !state.disabled
+
+    log.debug "app disabled? $state.disabled"
+
+    def msg = "$app.displayName is " + (state.disabled ? "disabled" : "enabled")
+    sendPush msg
 }
 
 def contactOpenHandler(evt) {
@@ -81,7 +96,10 @@ def motionInActiveHandler(evt) {
 }
 
 def turnOnLights() {
-    log.debug "turn on lights"
+    log.debug "turn on lights, disabled: $state.disabled"
+    if (state.disabled) {
+        return
+    }
 
     if (isDark()) {
         log.debug "It is dark, turning on..."
@@ -99,7 +117,10 @@ def scheduleTurnOff() {
 }
 
 def turnOffLights() {
-    log.debug "turning off lights"
+    log.debug "turning off lights, disabled: $state.disabled"
+    if (state.disabled) {
+        return
+    }
 
     lights.off()
 }
@@ -115,6 +136,6 @@ private isDark() {
     log.debug "sunrise: ${ss.sunrise} sunset: ${ss.sunset} now: ${t} offset: $offset"
 
     def dark = t < ss.sunrise.time || t > ss.sunset.time
-    log.debug "dark = $dark"
+    log.debug "dark? $dark"
     return dark
 }
