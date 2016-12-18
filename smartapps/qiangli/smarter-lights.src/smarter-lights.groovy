@@ -75,7 +75,7 @@ private turnOnLights() {
         lights.on()
 
         def delay = minutes * 60
-        log.debug "Turning off in ${minutesLater} minutes (${delay}seconds)"
+        log.debug "Turning off in ${minutes} minutes (${delay}seconds)"
         runIn(delay, turnOffLights, [overwrite: true])
     }
 }
