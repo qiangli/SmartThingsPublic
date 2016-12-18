@@ -66,7 +66,7 @@ def motionActiveHandler(evt) {
     turnOnLights()
 }
 
-private turnOnLights() {
+def turnOnLights() {
     log.debug "turn On Lights"
 
     if (isDark()) {
@@ -80,7 +80,7 @@ private turnOnLights() {
     }
 }
 
-private turnOffLights() {
+def turnOffLights() {
     lights.off()
 }
 
