@@ -63,7 +63,7 @@ def switchOffHandler(evt) {
 }
 
 def turnOff() {
-    log.debug "Turning off thermostat..."
+    log.debug "Turning off thermostat $state ..."
 
     stat()
 
@@ -73,7 +73,7 @@ def turnOff() {
 }
 
 def turnOn() {
-    log.debug "Turning on thermostat $mode , $temperature $delay ..."
+    log.debug "Turning on thermostat $mode, $temperature, $delay ..."
 
     switch ("$mode") {
         case "Cool":
@@ -97,6 +97,6 @@ private stat() {
     state.thermostatMode = thermostat.currentValue("thermostatMode")
     state.coolingSetpoint = thermostat.currentValue("coolingSetpoint")
     state.heatingSetpoint = thermostat.currentValue("heatingSetpoint")
-    state.thermostatSetpoint = thermostat.currentValue("thermostatSetpoint")
+    //state.thermostatSetpoint = thermostat.currentValue("thermostatSetpoint")
     state.temperature = thermostat.currentValue("temperature")
 }
