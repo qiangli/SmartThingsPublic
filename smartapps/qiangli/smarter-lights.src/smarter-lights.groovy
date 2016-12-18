@@ -61,7 +61,7 @@ def initialize() {
 }
 
 def appHandler(evt) {
-    log.debug "app event $evt.displayName $evt.name: $evt.value, disabled: $state.disable"
+    log.debug "app event: $evt.displayName, $evt.name: $evt.value, disabled: $state.disabled"
 
     state.disabled = !state.disabled
 
