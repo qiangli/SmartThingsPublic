@@ -9,20 +9,19 @@ definition(
         name: "Smarter Lights",
         namespace: "qiangli",
         author: "Li Qiang",
-        description: "Contact and motion sensors work in concert to control lights for garage or rooms with multiple doors.",
+        description: "Contact and motion sensors work in concert to control lights for garage or rooms with multiple doors. At anytime, you may suspend the app by touching the play icon.",
         category: "Green Living",
         iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/light_outlet.png",
         iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/light_outlet@2x.png"
 )
 
 preferences {
-    section("Turn on the lights after sunset and before sunrise"){
+    section("Turn on the lights"){
         input "lights", "capability.switch", multiple: true, title: "Lights", required: true
+        input "afterDark", "bool", title: "after sunset and before sunrise", required: false
+        input "offset", hideWhenEmpty: "afterDark", "text", title: "Offset before sunset/after sunrise (HH:MM)", required: false, defaultValue: "01:00"
     }
-    section("Offset before sunset/after sunrise") {
-        input "offset", "text", title: "HH:MM", required: false, defaultValue: "01:00"
-    }
-    section("When one of the doors is open"){
+    section("When door is open"){
         input "doors", "capability.contactSensor", multiple: true, title: "Open/Close contact sensors", required: false
     }
     section("or motion is detected"){
@@ -101,8 +100,8 @@ def turnOnLights() {
         return
     }
 
-    if (isDark()) {
-        log.debug "It is dark, turning on..."
+    if (autoLightOn()) {
+        log.debug "turning on lights..."
 
         lights.on()
     }
@@ -127,8 +126,14 @@ def turnOffLights() {
     lights.off()
 }
 
-private isDark() {
-    //def ss = getSunriseAndSunset()
+private autoLightOn() {
+    log.debug "Auto light on, aferDark: $afterDark"
+
+    if (!afterDark) {
+        return true
+    }
+
+    //after dark only
     def sunriseOffset = "$offset"
     def sunsetOffset = "-$offset"
     def ss =getSunriseAndSunset(sunriseOffset: sunriseOffset, sunsetOffset: sunsetOffset)
