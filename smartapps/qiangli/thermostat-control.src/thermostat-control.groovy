@@ -21,9 +21,9 @@ preferences {
 
     section("HVAC") {
         input("thermostat", "capability.thermostat", title: "Thermostat", multiple: false)
-        input("mode", "enum", options: ["Heat", "Cool", "Auto"], title: "Mode")
-        input("temperature", "number", title: "Temperature")
-        input("delay", "number", title: "Delay (seconds)")
+        input("mode", "enum", options: ["Heat", "Cool", "Auto"], title: "Mode", defaultValue: "Auto")
+        input("temperature", "number", title: "Temperature", defaultValue: 72)
+        input("delay", "number", title: "Delay (seconds)", defaultValue: 60)
     }
 }
 
