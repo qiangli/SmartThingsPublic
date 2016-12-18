@@ -49,14 +49,14 @@ def initialize() {
 }
 
 def switchOnHandler(evt) {
-    log.debug "switchOnHandler $evt.name: $evt.value"
+    log.debug "switchOnHandler $evt.name: $evt.value $state"
 
     unschedule()
     runIn(delay, turnOn)
 }
 
 def switchOffHandler(evt) {
-    log.debug "switchOffHandler $evt.name: $evt.value"
+    log.debug "switchOffHandler $evt.name: $evt.value $state"
 
     unschedule()
     runIn(delay, turnOff)
@@ -65,15 +65,13 @@ def switchOffHandler(evt) {
 def turnOff() {
     log.debug "Turning off thermostat $state ..."
 
-    stat()
-
     thermostat.off()
 
-    log.debug "State: $state"
+    stat()
 }
 
 def turnOn() {
-    log.debug "Turning on thermostat $mode, $temperature, $delay ..."
+    log.debug "Turning on thermostat $mode $temperature $delay, $state ..."
 
     //seems the command heat/cool does not change the mode?
     thermostat.setThermostatMode(mode)
@@ -91,8 +89,6 @@ def turnOn() {
     }
 
     stat()
-
-    log.debug "State: $state"
 }
 
 private stat() {
@@ -101,4 +97,6 @@ private stat() {
     state.heatingSetpoint = thermostat.currentValue("heatingSetpoint")
     //state.thermostatSetpoint = thermostat.currentValue("thermostatSetpoint")
     state.temperature = thermostat.currentValue("temperature")
+
+    log.debug "State: $state"
 }
