@@ -1,14 +1,14 @@
 /**
- *  Thermostat Control
+ *  Thermostat Control Switch
  *
  *  Author: Li Qiang
  *  Date: 2016-12-12
  */
 definition(
-        name: "Thermostat Control",
+        name: "Thermostat Control Switch",
         namespace: "qiangli",
         author: "Li Qiang",
-        description: "When a switch turns on/off, turn on/off thermostat.",
+        description: "Use a switch to turn thermostat on and off.",
         category: "Green Living",
         iconUrl: "https://s3.amazonaws.com/smartapp-icons/Meta/light_outlet.png",
         iconX2Url: "https://s3.amazonaws.com/smartapp-icons/Meta/light_outlet@2x.png"
@@ -21,6 +21,8 @@ preferences {
 
     section("HVAC") {
         input("thermostat", "capability.thermostat", title: "Thermostat", multiple: false)
+        input("mode", "enum", options: ["Heat", "Cool", "Auto"], title: "Mode")
+        input("temperature", "number", title: "Temperature")
         input("delay", "number", title: "Delay (seconds)")
     }
 }
@@ -57,25 +59,44 @@ def switchOffHandler(evt) {
     log.debug "switchOffHandler $evt.name: $evt.value"
 
     unschedule()
-    runIn(delay, 'turnOff')
+    runIn(delay, turnOff)
 }
 
 def turnOff() {
     log.debug "Turning off thermostat..."
-    state.thermostatMode = thermostat.currentValue("thermostatMode")
+
+    stat()
+
     thermostat.off()
+
     log.debug "State: $state"
 }
 
 def turnOn() {
-    //def thermostatMode = thermostat.currentValue("thermostatMode")
-    //log.debug "Restoring thermostat to thermostatMode $thermostatMode"
+    log.debug "Turning on thermostat $mode , $temperature $delay ..."
 
-    //thermostat.setThermostatMode(thermostatMode)
-    log.debug "Turning on thermostat..."
-    //TODO
-    thermostat.auto()
+    switch ("$mode") {
+        case "Cool":
+            thermostat.cool()
+            thermostat.setCoolingSetpoint(temperature)
+            break
+        case "Heat":
+            thermostat.heat()
+            thermostat.setHeatingSetpoint(temperature)
+        case "Auto":
+            thermostat.auto()
+            break
+    }
 
-    state.thermostatMode = thermostat.currentValue("thermostatMode")
+    stat()
+
     log.debug "State: $state"
+}
+
+private stat() {
+    state.thermostatMode = thermostat.currentValue("thermostatMode")
+    state.coolingSetpoint = thermostat.currentValue("coolingSetpoint")
+    state.heatingSetpoint = thermostat.currentValue("heatingSetpoint")
+    state.thermostatSetpoint = thermostat.currentValue("thermostatSetpoint")
+    state.temperature = thermostat.currentValue("temperature")
 }
