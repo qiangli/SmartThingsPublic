@@ -1,11 +1,11 @@
 /**
- *  Thermostat Control Switch
+ *  Thermostat Control
  *
  *  Author: Li Qiang
  *  Date: 2016-12-12
  */
 definition(
-        name: "Thermostat Control Switch",
+        name: "Thermostat Control",
         namespace: "qiangli",
         author: "Li Qiang",
         description: "Use a switch to turn thermostat on and off.",
