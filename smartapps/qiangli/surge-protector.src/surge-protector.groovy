@@ -19,11 +19,11 @@ preferences {
         input("maximum", "number", title: "Wattage", required: true)
     }
     section("Appliance and its Wattage") {
-        input("outlet1", "capability.switch", multiple: false)
+        input("outlet1", "capability.switch", multiple: false, required: false,)
         input("wattage1", "number", title: "Wattage", required: false, hideWhenEmpty: "outlet1")
-        input("outlet2", "capability.switch", multiple: false)
+        input("outlet2", "capability.switch", multiple: false, required: false,)
         input("wattage2", "number", title: "Wattage", required: false, hideWhenEmpty: "outlet2")
-        input("outlet3", "capability.switch", multiple: false)
+        input("outlet3", "capability.switch", multiple: false, required: false,)
         input("wattage3", "number", title: "Wattage", required: false, hideWhenEmpty: "outlet3")
     }
     section("Notifications") {
