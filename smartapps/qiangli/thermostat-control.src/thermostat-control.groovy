@@ -51,25 +51,25 @@ def initialize() {
 def switchOnHandler(evt) {
     log.debug "switchOnHandler $evt.name: $evt.value $state"
 
-    if (isThermostatOff()) {
-        log.debug "thermostat is off, turning on..."
-        unschedule()
-        runIn(delay, turnOn)
-    }
+    unschedule()
+    runIn(delay, turnOn)
 }
 
 def switchOffHandler(evt) {
     log.debug "switchOffHandler $evt.name: $evt.value $state"
 
-    if (isThermostatOn()) {
-        log.debug "thermostat is on, turning off..."
-        unschedule()
-        runIn(delay, turnOff)
-    }
+    unschedule()
+    runIn(delay, turnOff)
 }
 
 def turnOff() {
     log.debug "Turning off thermostat $state ..."
+
+    if (isThermostatOff()) {
+        log.debug "thermostat is already off, returning..."
+        return
+    }
+    log.debug "Thermostat is on, turning off ..."
 
     thermostat.off()
 
@@ -78,7 +78,13 @@ def turnOff() {
 
 def turnOn() {
     log.debug "Turning on thermostat $mode $temperature $delay, $state ..."
-    
+
+    if (isThermostatOn()) {
+        log.debug "thermostat is already on, returning..."
+        return
+    }
+    log.debug "thermostat is off, turning on..."
+
     switch ("$mode") {
         case "Cool":
             thermostat.cool()
