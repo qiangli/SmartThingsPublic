@@ -67,7 +67,7 @@ def appHandler(evt) {
 
     log.debug "app disabled? $state.disabled"
 
-    def msg = "$app.displayName is " + (state.disabled ? "disabled" : "enabled")
+    def msg = "$app.label is " + (state.disabled ? "disabled" : "enabled")
     sendPush msg
 }
 
@@ -109,7 +109,9 @@ def turnOnLights() {
 }
 
 def scheduleTurnOff() {
-    log.debug "schedule turn off"
+    log.debug "schedule turn off, disabled: $state.disabled"
+
+    //schedule the turn off regardless of disabled state or not
 
     def delay = minutes * 60
     log.debug "Turning off in ${minutes} minutes (${delay}seconds)"
