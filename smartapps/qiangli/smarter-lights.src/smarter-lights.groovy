@@ -67,7 +67,7 @@ def motionActiveHandler(evt) {
 }
 
 def turnOnLights() {
-    log.debug "turn On Lights"
+    log.debug "turn on lights"
 
     if (isDark()) {
         log.debug "It is dark, turning on..."
@@ -81,6 +81,7 @@ def turnOnLights() {
 }
 
 def turnOffLights() {
+    log.debug "turn off lights"
     lights.off()
 }
 
