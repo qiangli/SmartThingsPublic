@@ -108,7 +108,7 @@ private isThermostatOff() {
 
 private isThermostatOn() {
     def mode = thermostat.currentValue("thermostatMode")
-    log.debug "isThermostatOff? mode: $mode"
+    log.debug "isThermostatOn? mode: $mode"
 
     return ("off" != mode)
 }
