@@ -50,12 +50,12 @@ def updated() {
 def initialize() {
     log.debug "initialize..."
 
-    subscribe(doors, "switch.on", switchOnHandler)
+    subscribe(doors, "contact.open", contactOpenHandler)
     subscribe(motions, "motion.active", motionActiveHandler)
 }
 
-def switchOnHandler(evt) {
-    log.debug "Switch on $evt.name: $evt.value"
+def contactOpenHandler(evt) {
+    log.debug "Contact open $evt.name: $evt.value"
 
     turnOnLights()
 }
