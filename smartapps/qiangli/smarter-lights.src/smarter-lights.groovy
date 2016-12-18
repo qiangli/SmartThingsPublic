@@ -19,10 +19,10 @@ preferences {
     section("Turn on the lights after sunset and before sunrise"){
         input "lights", "capability.switch", multiple: true, title: "Lights", required: true
     }
-    section("Offset before sunset and after sunrise") {
+    section("Offset before sunset/after sunrise") {
         input "offset", "text", title: "HH:MM", required: false, defaultValue: "01:00"
     }
-    section("When one door is open"){
+    section("When one of the doors is open"){
         input "doors", "capability.contactSensor", multiple: true, title: "Open/Close contact sensors", required: false
     }
     section("or motion is detected"){
@@ -50,25 +50,24 @@ def updated() {
 def initialize() {
     log.debug "initialize..."
 
-    subscribe(doors, "switch.on", switchOnHandler, [filterEvents: false])
+    subscribe(doors, "switch.on", switchOnHandler)
     subscribe(motions, "motion.active", motionActiveHandler)
-    //subscribe(lights, "switch", switchChange)
 }
 
 def switchOnHandler(evt) {
-    log.debug "Switch ${theSwitch} turned: ${evt.value}"
+    log.debug "Switch on $evt.name: $evt.value"
 
     turnOnLights()
 }
 
 def motionActiveHandler(evt) {
-    log.debug "Motion $evt.name: $evt.value"
+    log.debug "Motion active $evt.name: $evt.value"
 
     turnOnLights()
 }
 
 private turnOnLights() {
-    log.debug "turnOnLights"
+    log.debug "turn On Lights"
 
     if (isDark()) {
         log.debug "It is dark, turning on..."
