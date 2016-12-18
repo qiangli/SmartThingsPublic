@@ -52,7 +52,7 @@ def switchOnHandler(evt) {
     log.debug "switchOnHandler $evt.name: $evt.value"
 
     unschedule()
-    runIn(delay, 'turnOn')
+    runIn(delay, turnOn)
 }
 
 def switchOffHandler(evt) {
