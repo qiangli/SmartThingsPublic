@@ -87,8 +87,8 @@ private turnOffLights() {
 
 private isDark() {
     //def ss = getSunriseAndSunset()
-    def sunriseOffset = offset
-    def sunsetOffset = -offset
+    def sunriseOffset = "$offset"
+    def sunsetOffset = "-$offset"
     def ss =getSunriseAndSunset(sunriseOffset: sunriseOffset, sunsetOffset: sunsetOffset)
 
     def t = now()
