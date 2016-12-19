@@ -1,21 +1,11 @@
 /**
- *  ZigBee Button
+ *  Iris ZigBee Button
  *
- *  Copyright 2015 Mitch Pond
- *
- *  Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- *  in compliance with the License. You may obtain a copy of the License at:
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
- *  on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License
- *  for the specific language governing permissions and limitations under the License.
- *
+ *  Based on ZigBee Button by Mitch Pond
  */
 
 metadata {
-    definition (name: "ZigBee Button", namespace: "smartthings", author: "Mitch Pond") {
+    definition (name: "Iris ZigBee Button", namespace: "qiangli", author: "Li Qiang") {
         capability "Actuator"
         capability "Battery"
         capability "Button"
@@ -25,7 +15,7 @@ metadata {
 
         command "enrollResponse"
 
-        fingerprint inClusters: "0000, 0001, 0003, 0020, 0402, 0B05", outClusters: "0003, 0006, 0008, 0019", manufacturer: "OSRAM", model: "LIGHTIFY Dimming Switch", deviceJoinName: "OSRAM LIGHTIFY Dimming Switch"
+        //fingerprint inClusters: "0000, 0001, 0003, 0020, 0402, 0B05", outClusters: "0003, 0006, 0008, 0019", manufacturer: "OSRAM", model: "LIGHTIFY Dimming Switch", deviceJoinName: "OSRAM LIGHTIFY Dimming Switch"
         //fingerprint inClusters: "0000, 0001, 0003, 0020, 0500", outClusters: "0003,0019", manufacturer: "CentraLite", model: "3455-L", deviceJoinName: "Iris Care Pendant"
         //fingerprint inClusters: "0000, 0001, 0003, 0007, 0020, 0402, 0B05", outClusters: "0003, 0006, 0019", manufacturer: "CentraLite", model: "3460-L", deviceJoinName: "Iris Smart Button"
         //fingerprint inClusters: "0000, 0001, 0003, 0007, 0020, 0B05", outClusters: "0003, 0006, 0019", manufacturer: "CentraLite", model:"3450-L", deviceJoinName: "Iris KeyFob"
@@ -35,7 +25,7 @@ metadata {
 
     preferences {
         section {
-            input ("holdTime", "number", title: "Minimum time in seconds for a press to count as \"held\"", defaultValue: 1, displayDuringSetup: false)
+            input ("holdTime", "number", title: "Minimum time in seconds for a press to count as \"held\"", defaultValue: 3, displayDuringSetup: false)
         }
     }
 
@@ -58,9 +48,12 @@ metadata {
 }
 
 def parse(String description) {
-    log.debug "description is $description"
+    log.debug "parse description: $description"
+
     def event = zigbee.getEvent(description)
     if (event) {
+        log.debug "sending event: $event"
+
         sendEvent(event)
     }
     else {
@@ -78,6 +71,7 @@ def parse(String description) {
         }
 
         log.debug "Parse returned $event"
+
         def result = event ? createEvent(event) : []
 
         if (description?.startsWith('enroll request')) {
@@ -100,7 +94,8 @@ private Map parseIasButtonMessage(String description) {
 }
 
 private Map getBatteryResult(rawValue) {
-    log.debug 'Battery'
+    log.debug "getBatteryResult rawValue: $rawValue"
+
     def volts = rawValue / 10
     if (volts > 3.0 || volts == 0 || rawValue == 0xFF) {
         return [:]
@@ -120,6 +115,8 @@ private Map getBatteryResult(rawValue) {
 }
 
 private Map parseNonIasButtonMessage(Map descMap){
+    log.debug "parseNonIasButtonMessage descMap: $descMap"
+
     def buttonState = ""
     def buttonNumber = 0
     if (((device.getDataValue("model") == "3460-L") || (device.getDataValue("model") == "3450-L"))
@@ -163,14 +160,15 @@ private Map parseNonIasButtonMessage(Map descMap){
 }
 
 def refresh() {
-    log.debug "Refreshing Battery"
+    log.debug "Refresh -- battery"
 
     return zigbee.readAttribute(0x0001, 0x20) +
             zigbee.enrollResponse()
 }
 
 def configure() {
-    log.debug "Configuring Reporting, IAS CIE, and Bindings."
+    log.debug "Configure -- Reporting, IAS CIE, and Bindings."
+
     def cmds = []
     if (device.getDataValue("model") == "3450-L") {
         cmds << [
@@ -190,6 +188,8 @@ def configure() {
 }
 
 private Map getButtonResult(buttonState, buttonNumber = 1) {
+    log.debug "getButtonResult: $buttonState"
+
     if (buttonState == 'release') {
         log.debug "Button was value : $buttonState"
         def timeDiff = now() - state.pressTime
@@ -221,14 +221,23 @@ private Map getButtonResult(buttonState, buttonNumber = 1) {
 }
 
 def installed() {
+    log.debug "installed ..."
+
     initialize()
 }
 
 def updated() {
+    log.debug "updated ..."
+
     initialize()
 }
 
 def initialize() {
+    def mf = device.getDataValue("manufacturer")
+    def m = device.getDataValue("model")
+
+    log.debug "initialize manufacturer: $mf model: $m"
+
     if ((device.getDataValue("manufacturer") == "OSRAM") && (device.getDataValue("model") == "LIGHTIFY Dimming Switch")) {
         sendEvent(name: "numberOfButtons", value: 2)
     }
