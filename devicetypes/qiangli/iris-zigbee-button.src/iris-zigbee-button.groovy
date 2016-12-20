@@ -39,9 +39,9 @@ metadata {
             state "battery", label:'${currentValue}% battery', unit:""
         }
 
-        standardTile("refresh", "device.refresh", inactiveLabel: false, decoration: "flat") {
-            state "default", action:"refresh.refresh", icon:"st.secondary.refresh"
-        }
+//        standardTile("refresh", "device.refresh", inactiveLabel: false, decoration: "flat") {
+//            state "default", action:"refresh.refresh", icon:"st.secondary.refresh"
+//        }
         main (["button"])
         details(["button", "battery", "refresh"])
     }
@@ -159,25 +159,25 @@ private Map parseNonIasButtonMessage(Map descMap){
     }
 }
 
-def refresh() {
-    log.debug "Refresh -- battery"
-
-    return zigbee.readAttribute(0x0001, 0x20) +
-            zigbee.enrollResponse()
-}
+//def refresh() {
+//    log.debug "Refresh -- battery"
+//
+//    return zigbee.readAttribute(0x0001, 0x20) +
+//            zigbee.enrollResponse()
+//}
 
 def configure() {
     log.debug "Configure -- Reporting, IAS CIE, and Bindings."
 
     def cmds = []
-    if (device.getDataValue("model") == "3450-L") {
-        cmds << [
-                "zdo bind 0x${device.deviceNetworkId} 1 1 6 {${device.zigbeeId}} {}", "delay 300",
-                "zdo bind 0x${device.deviceNetworkId} 2 1 6 {${device.zigbeeId}} {}", "delay 300",
-                "zdo bind 0x${device.deviceNetworkId} 3 1 6 {${device.zigbeeId}} {}", "delay 300",
-                "zdo bind 0x${device.deviceNetworkId} 4 1 6 {${device.zigbeeId}} {}", "delay 300"
-        ]
-    }
+//    if (device.getDataValue("model") == "3450-L") {
+//        cmds << [
+//                "zdo bind 0x${device.deviceNetworkId} 1 1 6 {${device.zigbeeId}} {}", "delay 300",
+//                "zdo bind 0x${device.deviceNetworkId} 2 1 6 {${device.zigbeeId}} {}", "delay 300",
+//                "zdo bind 0x${device.deviceNetworkId} 3 1 6 {${device.zigbeeId}} {}", "delay 300",
+//                "zdo bind 0x${device.deviceNetworkId} 4 1 6 {${device.zigbeeId}} {}", "delay 300"
+//        ]
+//    }
     return zigbee.onOffConfig() +
             zigbee.levelConfig() +
             zigbee.configureReporting(0x0001, 0x20, 0x20, 30, 21600, 0x01) +
@@ -198,10 +198,10 @@ private Map getButtonResult(buttonState, buttonNumber = 1) {
         log.info "holdp1 : $holdPreference"
         holdPreference = (holdPreference as int) * 1000
         log.info "holdp2 : $holdPreference"
-        if (timeDiff > 10000) {         //timeDiff>10sec check for refresh sending release value causing actions to be executed
-            return [:]
-        }
-        else {
+//        if (timeDiff > 10000) {         //timeDiff>10sec check for refresh sending release value causing actions to be executed
+//            return [:]
+//        }
+//        else {
             if (timeDiff < holdPreference) {
                 buttonState = "pushed"
             }
@@ -210,7 +210,7 @@ private Map getButtonResult(buttonState, buttonNumber = 1) {
             }
             def descriptionText = "$device.displayName button $buttonNumber was $buttonState"
             return createEvent(name: "button", value: buttonState, data: [buttonNumber: buttonNumber], descriptionText: descriptionText, isStateChange: true)
-        }
+       // }
     }
     else if (buttonState == 'press') {
         log.debug "Button was value : $buttonState"
