@@ -30,6 +30,8 @@ preferences {
 }
 
 def selectButton() {
+    log.trace "select button"
+
     dynamicPage(name: "selectButton", title: "First, select your button device", nextPage: "configureButton", uninstall: configured()) {
         section {
             input "buttonDevice", "capability.button", title: "Button", multiple: false, required: true
@@ -50,11 +52,15 @@ def selectButton() {
 }
 
 def configureButton() {
+    log.trace "configure button"
+
     dynamicPage(name: "configureButton", title: "Setup your button here",
             install: true, uninstall: true, getButtonSections(1))
 }
 
 def getButtonSections(buttonNumber) {
+    log.trace "get button selections $buttonNumber"
+
     return {
         section("Lights") {
             input "lights_${buttonNumber}_pushed", "capability.switch", title: "Pushed", multiple: true, required: false
@@ -102,10 +108,14 @@ def getButtonSections(buttonNumber) {
 }
 
 def installed() {
+    log.debug "installed ${settings}"
+
     initialize()
 }
 
 def updated() {
+    log.debug "updated ${settings}"
+
     unsubscribe()
     initialize()
 }
@@ -131,6 +141,8 @@ def buttonConfigured(idx) {
 }
 
 def buttonEvent(evt){
+    log.trace "button event: $allOk $evt"
+
     if(allOk) {
         def buttonNumber = evt.data // why doesn't jsonData work? always returning [:]
         def value = evt.value
