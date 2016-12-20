@@ -18,10 +18,8 @@ definition(
 
 preferences {
     page(name: "selectButton")
-    page(name: "configureButton1")
-    page(name: "configureButton2")
-    page(name: "configureButton3")
-    page(name: "configureButton4")
+   
+    page(name: "configureButton")
 
     page(name: "timeIntervalInput", title: "Only during a certain time") {
         section {
@@ -32,7 +30,7 @@ preferences {
 }
 
 def selectButton() {
-    dynamicPage(name: "selectButton", title: "First, select your button device", nextPage: "configureButton1", uninstall: configured()) {
+    dynamicPage(name: "selectButton", title: "First, select your button device", nextPage: "configureButton", uninstall: configured()) {
         section {
             input "buttonDevice", "capability.button", title: "Button", multiple: false, required: true
         }
@@ -51,21 +49,8 @@ def selectButton() {
     }
 }
 
-def configureButton1() {
-    dynamicPage(name: "configureButton1", title: "Now let's decide how to use the first button",
-            nextPage: "configureButton2", uninstall: configured(), getButtonSections(1))
-}
-def configureButton2() {
-    dynamicPage(name: "configureButton2", title: "If you have a second button, set it up here",
-            nextPage: "configureButton3", uninstall: configured(), getButtonSections(2))
-}
-
-def configureButton3() {
-    dynamicPage(name: "configureButton3", title: "If you have a third button, you can do even more here",
-            nextPage: "configureButton4", uninstall: configured(), getButtonSections(3))
-}
-def configureButton4() {
-    dynamicPage(name: "configureButton4", title: "If you have a fourth button, you rule, and can set it up here",
+def configureButton() {
+    dynamicPage(name: "configureButton", title: "If you have a fourth button, you rule, and can set it up here",
             install: true, uninstall: true, getButtonSections(4))
 }
 
