@@ -25,7 +25,7 @@ metadata {
 
     preferences {
         section {
-            input ("holdTime", "number", title: "Minimum time in seconds for a press to count as \"held\"", defaultValue: 3, displayDuringSetup: false)
+            input ("holdTime", "number", title: "Minimum time in seconds for a press to count as \"held\"", defaultValue: 1, displayDuringSetup: false)
         }
     }
 
