@@ -190,33 +190,39 @@ def configure() {
 private Map getButtonResult(buttonState, buttonNumber = 1) {
     log.debug "getButtonResult: $buttonState"
 
-    if (buttonState == 'release') {
-        log.debug "Button was value : $buttonState"
-        def timeDiff = now() - state.pressTime
-        log.info "timeDiff: $timeDiff"
-        def holdPreference = holdTime ?: 1
-        log.info "holdp1 : $holdPreference"
-        holdPreference = (holdPreference as int) * 1000
-        log.info "holdp2 : $holdPreference"
+//    if (buttonState == 'release') {
+//        log.debug "Button was value : $buttonState"
+//        def timeDiff = now() - state.pressTime
+//        log.info "timeDiff: $timeDiff"
+//        def holdPreference = holdTime ?: 1
+//        log.info "holdp1 : $holdPreference"
+//        holdPreference = (holdPreference as int) * 1000
+//        log.info "holdp2 : $holdPreference"
 //        if (timeDiff > 10000) {         //timeDiff>10sec check for refresh sending release value causing actions to be executed
 //            return [:]
 //        }
 //        else {
-            if (timeDiff < holdPreference) {
-                buttonState = "pushed"
-            }
-            else {
-                buttonState = "held"
-            }
-            def descriptionText = "$device.displayName button $buttonNumber was $buttonState"
-            return createEvent(name: "button", value: buttonState, data: [buttonNumber: buttonNumber], descriptionText: descriptionText, isStateChange: true)
-       // }
-    }
-    else if (buttonState == 'press') {
-        log.debug "Button was value : $buttonState"
-        state.pressTime = now()
-        log.info "presstime: ${state.pressTime}"
-        return [:]
+//            if (timeDiff < holdPreference) {
+//                buttonState = "pushed"
+//            }
+//            else {
+//                buttonState = "held"
+//            }
+//            def descriptionText = "$device.displayName button $buttonNumber was $buttonState"
+//            return createEvent(name: "button", value: buttonState, data: [buttonNumber: buttonNumber], descriptionText: descriptionText, isStateChange: true)
+//        }
+//    }
+//    else
+    if (buttonState == 'press') {
+//        log.debug "Button was value : $buttonState"
+//        state.pressTime = now()
+//        log.info "presstime: ${state.pressTime}"
+//        return [:]
+
+        buttonState = "pushed"
+        def descriptionText = "$device.displayName button $buttonNumber was $buttonState"
+        return createEvent(name: "button", value: buttonState, data: [buttonNumber: buttonNumber], descriptionText: descriptionText, isStateChange: true)
+
     }
 }
 
