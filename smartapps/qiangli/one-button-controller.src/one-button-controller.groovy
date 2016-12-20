@@ -18,7 +18,7 @@ definition(
 
 preferences {
     page(name: "selectButton")
-   
+
     page(name: "configureButton")
 
     page(name: "timeIntervalInput", title: "Only during a certain time") {
@@ -50,8 +50,8 @@ def selectButton() {
 }
 
 def configureButton() {
-    dynamicPage(name: "configureButton", title: "If you have a fourth button, you rule, and can set it up here",
-            install: true, uninstall: true, getButtonSections(4))
+    dynamicPage(name: "configureButton", title: "Setup your button here",
+            install: true, uninstall: true, getButtonSections(1))
 }
 
 def getButtonSections(buttonNumber) {
@@ -111,11 +111,12 @@ def updated() {
 }
 
 def initialize() {
+    log.debug "initialize..."
     subscribe(buttonDevice, "button", buttonEvent)
 }
 
 def configured() {
-    return buttonDevice || buttonConfigured(1) || buttonConfigured(2) || buttonConfigured(3) || buttonConfigured(4)
+    return buttonDevice || buttonConfigured(1)
 }
 
 def buttonConfigured(idx) {
@@ -143,15 +144,6 @@ def buttonEvent(evt){
             switch(buttonNumber) {
                 case ~/.*1.*/:
                     executeHandlers(1, value)
-                    break
-                case ~/.*2.*/:
-                    executeHandlers(2, value)
-                    break
-                case ~/.*3.*/:
-                    executeHandlers(3, value)
-                    break
-                case ~/.*4.*/:
-                    executeHandlers(4, value)
                     break
             }
         } else {
