@@ -128,35 +128,35 @@ private Map parseNonIasButtonMessage(Map descMap){
             getButtonResult("release")
         }
     }
-    else if (descMap.clusterInt == 0x0006) {
-        buttonState = "pushed"
-        if (descMap.command == "01") {
-            buttonNumber = 1
-        }
-        else if (descMap.command == "00") {
-            buttonNumber = 2
-        }
-        if (buttonNumber !=0) {
-            def descriptionText = "$device.displayName button $buttonNumber was $buttonState"
-            return createEvent(name: "button", value: buttonState, data: [buttonNumber: buttonNumber], descriptionText: descriptionText, isStateChange: true)
-        }
-        else {
-            return [:]
-        }
-    }
-    else if (descMap.clusterInt == 0x0008) {
-        if (descMap.command == "05") {
-            state.buttonNumber = 1
-            getButtonResult("press", 1)
-        }
-        else if (descMap.command == "01") {
-            state.buttonNumber = 2
-            getButtonResult("press", 2)
-        }
-        else if (descMap.command == "03") {
-            getButtonResult("release", state.buttonNumber)
-        }
-    }
+//    else if (descMap.clusterInt == 0x0006) {
+//        buttonState = "pushed"
+//        if (descMap.command == "01") {
+//            buttonNumber = 1
+//        }
+//        else if (descMap.command == "00") {
+//            buttonNumber = 2
+//        }
+//        if (buttonNumber !=0) {
+//            def descriptionText = "$device.displayName button $buttonNumber was $buttonState"
+//            return createEvent(name: "button", value: buttonState, data: [buttonNumber: buttonNumber], descriptionText: descriptionText, isStateChange: true)
+//        }
+//        else {
+//            return [:]
+//        }
+//    }
+//    else if (descMap.clusterInt == 0x0008) {
+//        if (descMap.command == "05") {
+//            state.buttonNumber = 1
+//            getButtonResult("press", 1)
+//        }
+//        else if (descMap.command == "01") {
+//            state.buttonNumber = 2
+//            getButtonResult("press", 2)
+//        }
+//        else if (descMap.command == "03") {
+//            getButtonResult("release", state.buttonNumber)
+//        }
+//    }
 }
 
 //def refresh() {
@@ -188,7 +188,7 @@ def configure() {
 }
 
 private Map getButtonResult(buttonState, buttonNumber = 1) {
-    log.debug "getButtonResult: $buttonState"
+    log.debug "getButtonResult: $buttonState $buttonNumber"
 
 //    if (buttonState == 'release') {
 //        log.debug "Button was value : $buttonState"
@@ -223,6 +223,8 @@ private Map getButtonResult(buttonState, buttonNumber = 1) {
         def descriptionText = "$device.displayName button $buttonNumber was $buttonState"
         return createEvent(name: "button", value: buttonState, data: [buttonNumber: buttonNumber], descriptionText: descriptionText, isStateChange: true)
 
+    } else {
+        return [:]
     }
 }
 
@@ -244,19 +246,20 @@ def initialize() {
 
     log.debug "initialize manufacturer: $mf model: $m"
 
-    if ((device.getDataValue("manufacturer") == "OSRAM") && (device.getDataValue("model") == "LIGHTIFY Dimming Switch")) {
-        sendEvent(name: "numberOfButtons", value: 2)
-    }
-    else if ((device.getDataValue("manufacturer") == "CentraLite") &&
+//    if ((device.getDataValue("manufacturer") == "OSRAM") && (device.getDataValue("model") == "LIGHTIFY Dimming Switch")) {
+//        sendEvent(name: "numberOfButtons", value: 2)
+//    }
+//    else
+    if ((device.getDataValue("manufacturer") == "CentraLite") &&
             ((device.getDataValue("model") == "3455-L") || (device.getDataValue("model") == "3460-L"))) {
         sendEvent(name: "numberOfButtons", value: 1)
     }
-    else if ((device.getDataValue("manufacturer") == "CentraLite") && (device.getDataValue("model") == "3450-L")) {
-        sendEvent(name: "numberOfButtons", value: 4)
-    }
-    else {
-        //default. can be changed
-        sendEvent(name: "numberOfButtons", value: 4)
-    }
+//    else if ((device.getDataValue("manufacturer") == "CentraLite") && (device.getDataValue("model") == "3450-L")) {
+//        sendEvent(name: "numberOfButtons", value: 4)
+//    }
+//    else {
+//        //default. can be changed
+//        sendEvent(name: "numberOfButtons", value: 4)
+//    }
 
 }
