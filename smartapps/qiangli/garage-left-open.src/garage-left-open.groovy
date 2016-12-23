@@ -29,12 +29,12 @@ preferences {
 }
 
 def installed() {
-    log.trace "installed()"
+    log.trace "installed"
     initialize()
 }
 
 def updated() {
-    log.trace "updated()"
+    log.trace "updated"
     unsubscribe()
 
     initialize()
@@ -100,6 +100,7 @@ void sendOpenMessage(msg) {
 
 void sendCloseMessage(msg) {
     if (state.msgSent) {
+        state.msgSent = false
         sendMessage(msg)
     }
 }
