@@ -2,94 +2,16 @@
  * Created by liqiang on 11/5/17.
  * based on https://github.com/krlaframboise/SmartThings/tree/master/smartapps/krlaframboise/simple-device-viewer.src
  */
-/**
- *  Simple Device Viewer v 2.5.2
- *
- *  Author:
- *    Kevin LaFramboise (krlaframboise)
- *
- *  Contributors:
- *    Tim Larson (codethug)
- *
- *  URL to documentation:
- *    https://community.smartthings.com/t/release-simple-device-viewer/42481?u=krlaframboise
- *
- *  Changelog:
- *
- *    2.5.2 (07/11/2017)
- *      - Added Threshold and Notification Settings for Power Meter devices (added by codethug)
- *      - Reduced timeouts by changing main screen to display capability page links regardless of whether or not there are devices with that capability.
- *      - Added timeout checking to ensure user is always able to open the application.
- *      - Added ranges for thresholds which will hopefull cause the negative sign to be displayed on iOS.
- *      - Fixed issue with not being able to set the thresholds to 0.
- *      - Removed default values from threshold settings and made application skip over thresholds that are empty.
- *
- *    2.5.1 (02/21/2017)
- *      - Optionally display device's online/offline status in the dashboard.
- *      - Optionally override last even threshold and send notifications for offline devices.
- *      - Fixed timeout problem with Display Settings screen.
- *
- *    2.4.1 (01/21/2017)
- *      - Switched to SmartThings last activity field and only use the device's event history and state history if the device activity is null.
- *      - Added Acceleration Sensor Capability
- *      - Added Dashboard Layout options for condensed and multiple columns.
- *      - Added setting that allows you to choose which one is used.
- *
- *    2.3.2 (01/09/2017)
- *      - Fixed attribute for valve capability.
- *
- *    2.3.1 (01/07/2017)
- *      - Fixed problem with All Devices - States screen.
- *
- *    2.3.0 (01/06/2017)
- *      - Added support for Energy Meter, Illuminance Measurement, Power Meter, Relative Humidity Measurement, Valve
- *      - Added abort to "All Device - States" to prevent timeout errors.
- *
- *    2.2.3 (09/21/2016)
- *      - Still having occassional timeouts so made it abort sooner,
- *        but run more often when it's not successful.
- *
- *    2.2.1 (09/19/2016)
- *      - Made the program detect potential timeout errors and
- *        abort before it times out and then pickup where it left
- *        off the next time it runs.
- *
- *    2.1 (09/13/2016)
- *      - Added Ask Alexa Notification Option.
- *      - Reversed order of Events screen.
- *      - Changed Sort By Value default settings to true.
- *      - Added 3 more icons for battery levels.
- *
- *    2.0.1 (09/02/2016)
- *      - Bug fix due to platform issue.
- *
- *    2.0 (08/09/2016)
- *      - Added Dashboard
- *      - Added exclude device option for all capabilities.
- *
- *  Licensed under the Apache License, Version 2.0 (the
- *  "License"); you may not use this file except in
- *  compliance with the License. You may obtain a copy of
- *  the License at:
- *  http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in
- *  writing, software distributed under the License is
- *  distributed on an "AS IS" BASIS, WITHOUT WARRANTIES
- *  OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing
- *  permissions and limitations under the License.
- *
- */
 definition(
-        name: "Simple Device Viewer",
-        namespace: "krlaframboise",
-        author: "Kevin LaFramboise",
+        name: "Device View",
+        namespace: "qiangli",
+        author: "Qiang Li",
         description: "Provides information about the state of the specified devices.",
-        category: "My Apps",
+        category: "Convenience",
         iconUrl: "https://raw.githubusercontent.com/krlaframboise/Resources/master/simple-device-viewer/simple-device-viewer-icon.png",
         iconX2Url: "https://raw.githubusercontent.com/krlaframboise/Resources/master/simple-device-viewer/simple-device-viewer-icon-2x.png",
-        iconX3Url: "https://raw.githubusercontent.com/krlaframboise/Resources/master/simple-device-viewer/simple-device-viewer-icon-3x.png")
+        iconX3Url: "https://raw.githubusercontent.com/krlaframboise/Resources/master/simple-device-viewer/simple-device-viewer-icon-3x.png"
+)
 
 preferences {
     page(name:"mainPage")

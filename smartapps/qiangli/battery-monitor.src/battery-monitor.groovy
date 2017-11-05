@@ -66,9 +66,9 @@ def smartAppLicense() {
 }
 
 definition(
-        name: "BatteryMonitor",
-        namespace: "notoriousbdg",
-        author: "Brandon Gordon",
+        name: "Battery Monitor",
+        namespace: "qiangli",
+        author: "Qiang Li",
         description: "SmartApp to monitor battery levels.",
         category: "Convenience",
         iconUrl: "https://s3.amazonaws.com/smartapp-icons/Convenience/Cat-Convenience.png",
