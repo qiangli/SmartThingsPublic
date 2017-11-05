@@ -277,7 +277,9 @@ def updated() {
 }
 
 def initialize() {
-    schedule(settings.time, updateStatus)
+    if (settings.time != null) {
+        schedule(settings.time, updateStatus)
+    }
 }
 
 def send(msg) {
