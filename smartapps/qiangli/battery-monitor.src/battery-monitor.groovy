@@ -3,66 +3,39 @@
  * based on https://github.com/notoriousbdg/SmartThings.BatteryMonitor/tree/master/smartapps/notoriousbdg/batterymonitor.src
  */
 def smartAppNameFull() {
-    return  "BatteryMonitor SmartApp for SmartThings"
+    return  "Battery Monitor SmartApp for SmartThings"
 }
 
 def smartAppNameShort() {
-    return  "BatteryMonitor"
+    return  "Battery Monitor"
 }
 
 def smartAppVersion() {
-    return  "Version 0.0.6"
+    return  "Version 0.0.1"
 }
 
 def smartAppAuthor() {
-    return  "Author Brandon Gordon"
+    return  "Qiang Li"
 }
 
 def smartAppCopyright() {
-    return  "Copyright (c) 2014 Brandon Gordon"
+    return  "Copyright (c) 2017"
 }
 
 def smartAppSource() {
-    return  "https://github.com/notoriousbdg/SmartThings.BatteryMonitor"
+    return  "https://github.com/qiangli/SmartThingsPublic/tree/master/smartapps/qiangli/battery-monitor.src"
 }
 
 def smartAppDescription() {
-    return  "This SmartApp helps you monitor the status of your SmartThings devices with batteries."
+    return  "Monitor the status of devices' batteries."
 }
 
 def smartAppRevision () {
-    return  '2014-11-14  v0.0.1\n' +
-            ' * Initial release\n\n' +
-            '2014-11-15  v0.0.2\n' +
-            ' * Moved status to main page\n' +
-            ' * Removed status page\n' +
-            ' * Improved formatting of status page\n' +
-            ' * Added low, medium, high thresholds\n' +
-            ' * Handle battery status strings of OK and Low\n\n' +
-            '2014-11-15  v0.0.3\n' +
-            ' * Added push notifications\n\n' +
-            '2014-11-20  v0.0.4\n' +
-            ' * Added error handling for batteries that return strings\n\n' +
-            '2014-12-26  v0.0.5\n' +
-            ' * Move app metadata to a new about page\n' +
-            ' * Changed notifications to only send at specified time daily\n\n' +
-            '2017-05-08  v0.0.6\n' +
-            ' * Renamed for GitHub integration support\n' +
-            ' * Added support for sending SMS notifications to more than one phone number\n'
+    return  'v0.0.1\n'
 }
 
 def smartAppLicense() {
-    return  'Licensed under the Apache License, Version 2.0 (the "License"); you ' +
-            'may not use this file except in compliance with the License. You ' +
-            'may obtain a copy of the License at:' +
-            '\n\n' +
-            'http://www.apache.org/licenses/LICENSE-2.0' +
-            '\n\n' +
-            'Unless required by applicable law or agreed to in writing, software ' +
-            'distributed under the License is distributed on an "AS IS" BASIS, ' +
-            'WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or ' +
-            'implied. See the License for the specific language governing ' +
-            'permissions and limitations under the License.'
+    return  'Licensed under the Apache License, Version 2.0 (the "License")'
 }
 
 definition(
@@ -242,14 +215,14 @@ def pageConfigure() {
             name:           "time",
             type:           "time",
             title:          "Notify at what time daily?",
-            required:       true
+            required:       false
     ]
 
     def inputPush      = [
             name:           "pushMessage",
             type:           "bool",
             title:          "Send push notifications?",
-            defaultValue:   true
+            defaultValue:   false
     ]
 
     def inputSMS       = [
